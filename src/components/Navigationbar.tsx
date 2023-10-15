@@ -11,7 +11,7 @@ const Navigationbar = () => {
       <nav
          className='flex px-4 py-4 gap-6 md:gap-12 items-center tracking-tight relative 
       dark:shadow-[0_0_10px_1px_rgba(255,255,255,.75),0_0_20px_2px_hsla(0, 0%, 100%, 0.5)]
-      shadow-[0_0_10px_1px_rgba(0,0,0,.75),0_0_20px_2px_rgba(0,0,0,.5)] max-w-[360px]'
+      shadow-[0_0_10px_1px_rgba(0,0,0,.75),0_0_20px_2px_rgba(0,0,0,.5)]'
       >
          <figure className='w-16 aspect-square border-2 rounded-sm border-red-900 dark:border-red-100 flex justify-center items-center'>
             <img
