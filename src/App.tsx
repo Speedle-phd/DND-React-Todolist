@@ -47,7 +47,7 @@ function App() {
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
          <FormProvider {...form}>
             <Navigationbar />
-            <MainSection className='overflow-x-hidden w-[max(calc(100vw-20rem),360px)] mx-auto mt-10 min-h-[80dvh] border rounded-lg py-8 px-6 md:px-10 shadow-lightmodeAccent dark:shadow-darkmodeAccent'>
+            <MainSection className='overflow-x-hidden w-[max(calc(100vw-20rem),20rem)] mx-auto mt-10 min-h-[80dvh] border rounded-lg py-8 px-6 md:px-10 shadow-lightmodeAccent dark:shadow-darkmodeAccent'>
                <AddTask />
                <TodoList />
             </MainSection>
