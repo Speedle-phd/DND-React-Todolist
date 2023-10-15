@@ -9,9 +9,9 @@ import logo from '../assets/images/logo.jpg'
 const Navigationbar = () => {
    return (
       <nav
-         className='flex px-4 py-4 gap-12 items-center tracking-tight relative 
-      dark:shadow-[0_0_10px_1px_rgba(255,255,255,.75),0_0_20px_2px_rgba(255,255,255,.5)]
-      shadow-[0_0_10px_1px_rgba(0,0,0,.75),0_0_20px_2px_rgba(0,0,0,.5)]'
+         className='flex px-4 py-4 gap-6 md:gap-12 items-center tracking-tight relative 
+      dark:shadow-[0_0_10px_1px_rgba(255,255,255,.75),0_0_20px_2px_hsla(0, 0%, 100%, 0.5)]
+      shadow-[0_0_10px_1px_rgba(0,0,0,.75),0_0_20px_2px_rgba(0,0,0,.5)] max-w-[360px]'
       >
          <figure className='w-16 aspect-square border-2 rounded-sm border-red-900 dark:border-red-100 flex justify-center items-center'>
             <img
@@ -20,7 +20,7 @@ const Navigationbar = () => {
                alt='logo'
             />
          </figure>
-         <h1 className='scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl font-vollkorn'>
+         <h1 className='scroll-m-20 text-3xl md:text-4xl font-bold tracking-tight lg:text-5xl font-vollkorn'>
             To-Do-List
          </h1>
          <NavigationMenu className='fixed top-4 right-4'>
