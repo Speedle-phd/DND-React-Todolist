@@ -11,14 +11,11 @@ import { cn } from '@/lib/utils'
 import { EditIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 
-
 const Dndcontext = () => {
    const formCtx = useFormContext()
    const ctx = useGlobalContext()
-   console.log(ctx)
    const containers = ['planned', 'pending', 'completed']
    // const [parent, setParent] = useState<UniqueIdentifier | null>(null)
-
 
    return (
       <DndContext onDragEnd={handleDragEnd}>
@@ -31,11 +28,17 @@ const Dndcontext = () => {
                      (task) => task.status === container
                   )
                   const Markup = filteredTasks?.map((task) => {
+                     const overdue = task.dueTo
+                        ? new Date(task.dueTo) <= new Date()
+                        : false
                      return (
                         <Draggable
                            key={task.id}
                            id={task.id}
                            status={task.status}
+                           className={`${
+                              overdue ? 'border-4 border-red-900' : null
+                           }`}
                         >
                            <div
                               className={
@@ -44,12 +47,18 @@ const Dndcontext = () => {
                            >
                               <h3 className='text-xl'>{task.task}</h3>
                               <p className='absolute bottom-0 left-0 text-[0.5rem]'>
-                                 Created: {task.createdAt.toLocaleDateString()}
+                                 Created:{' '}
+                                 {new Date(task.createdAt).toLocaleDateString()}
                               </p>
                               <p className='absolute bottom-0 right-0 text-[0.5rem]'>
-                                 {task.dueTo &&
-                                    'Due to: ' +
-                                       task.dueTo.toLocaleDateString()}
+                                 {task.dueTo
+                                    ? !overdue
+                                       ? 'Due to: ' +
+                                          new Date(
+                                             task.dueTo
+                                          ).toLocaleDateString()
+                                       : 'Overdue'
+                                    : null}
                               </p>
                            </div>
                         </Draggable>
@@ -99,9 +108,8 @@ const Dndcontext = () => {
    )
 
    function handleDragEnd(e: DragEndEvent) {
-      console.log(e)
       const draggedId = e.active.id
-      const toBeChangedEl = ctx?.tasks.find(task => task.id === draggedId)
+      const toBeChangedEl = ctx?.tasks.find((task) => task.id === draggedId)
       const { over } = e
       if (over?.id === 'planned') {
          ctx?.changeTaskStatus(toBeChangedEl!, 'planned')
@@ -115,8 +123,8 @@ const Dndcontext = () => {
          const editId = toBeChangedEl?.id
          const editTask = toBeChangedEl?.task
          const editDueTo = toBeChangedEl?.dueTo
-         formCtx.setValue("task", editTask)
-         formCtx.setValue("dueTo", editDueTo)
+         formCtx.setValue('task', editTask)
+         formCtx.setValue('dueTo', editDueTo)
          ctx?.toggleEdit(editId!)
       }
    }

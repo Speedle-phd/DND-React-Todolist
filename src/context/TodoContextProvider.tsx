@@ -1,4 +1,4 @@
-import { TaskStructure } from '@/components/FormElement'
+import { TaskStructure } from '@/App'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 interface TodoContextProps {
@@ -20,7 +20,7 @@ const TodoContextProvider = ({ children }: React.PropsWithChildren) => {
    //REF
 
    //STATE
-   const [tasks, setTasks] = useState<TaskStructure[]>([])
+   const [tasks, setTasks] = useState<TaskStructure[]>(JSON.parse(localStorage.getItem('pandas-todo')!) ?? [])
    const [edit, setEdit] = useState<string | null>(null)
    //FUNCTIONS
    const changeTaskStatus = (
@@ -60,7 +60,7 @@ const TodoContextProvider = ({ children }: React.PropsWithChildren) => {
 
    //LOGGING
    useEffect(() => {
-      console.log(tasks)
+      localStorage.setItem('pandas-todo', JSON.stringify(tasks))
    }, [tasks])
 
    return (

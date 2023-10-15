@@ -9,9 +9,11 @@ import TodoContextProvider from './context/TodoContextProvider'
 
 //TODO: Implementing Filter Buttons and methods for ordering alphabetically and filtering prioritize<true | false>
 
-//TODO: Implementing localstorage hook or methods
+//TODO: Implementing localstorage with a hook instead of just localstoraging inline
 
 //TODO: MAYBE: Implementing ordering tasks / dropzone right after dropping the task. Maybe shift other tasks for preview effects.
+
+//TODO: Get a red border for all tasks that are overdue
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>

@@ -30,6 +30,7 @@ const formSchema = z.object({
    ),
    createdAt: z.date().default(new Date()),
 })
+export type TaskStructure = z.infer<typeof formSchema>
 
 function App() {
 
