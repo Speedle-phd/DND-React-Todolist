@@ -38,7 +38,7 @@ const Dndcontext = () => {
                            status={task.status}
                            className={`${
                               overdue ? 'border-4 border-red-900' : null
-                           }`}
+                           } touch-none`}
                         >
                            <div
                               className={

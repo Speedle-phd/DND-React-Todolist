@@ -29,6 +29,7 @@ const formSchema = z.object({
       z.date().min(new Date(), { message: 'Please pick a date in the future.' })
    ),
    createdAt: z.date().default(new Date()),
+   prioritize: z.boolean().default(false)
 })
 export type TaskStructure = z.infer<typeof formSchema>
 
