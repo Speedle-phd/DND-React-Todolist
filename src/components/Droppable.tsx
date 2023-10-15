@@ -9,7 +9,8 @@ const Droppable = (props : DroppableProps) => {
 
    const {isOver, setNodeRef} = useDroppable({id: props.id as UniqueIdentifier})
    const style = {
-      backgroundColor: isOver ? '#ddd3' : undefined
+      backgroundColor: isOver ? '#222' : undefined,
+      opacity: isOver ? 0.1 : 1,
    }
    return <div ref={setNodeRef} style={{...style, ...props.style}} className={props.className}>
       {props.children}

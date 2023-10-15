@@ -1,5 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+
+import { FieldValues, SubmitHandler, useFormContext } from 'react-hook-form'
 import * as z from 'zod'
 import {
    Form,
@@ -14,6 +14,7 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import DatePicker from './Datepicker'
 import { useGlobalContext } from '@/context/TodoContextProvider'
+import { useEffect } from 'react'
 
 
 
@@ -45,26 +46,42 @@ export type TaskStructure = z.infer<typeof formSchema>
 const FormElement = () => {
    const ctx = useGlobalContext()
    // 1. Define your form.
-   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-         task: '',
-      },
-   })
-   function onSubmit(values: z.infer<typeof formSchema>) {
+   const {
+      reset,
+      
+      formState,
+      formState: { isSubmitSuccessful },
+      control,
+      ...form
+      
+   } = useFormContext()
+   function handleSubmit(values: TaskStructure) {
       // ✅ This will be type-safe and validated.
-      const id = crypto.randomUUID()
-      ctx?.addTask({...values, id})
+
+      if(!ctx?.edit) {
+         const id = crypto.randomUUID()
+         ctx?.addTask({...values, id})
+         return
+      }
+      ctx?.alterEntry(values.task, values.dueTo)
    }
+   useEffect(() => {
+      if(isSubmitSuccessful) {
+         reset({
+            task: "",
+            dueTo: undefined
+         })
+      }
+   },[isSubmitSuccessful, reset])
    return (
-      <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className=''>
+      <Form formState={formState} reset={reset} control={control} {...form}>
+         <form onSubmit={form.handleSubmit(handleSubmit as SubmitHandler<FieldValues>)} className=''>
             <FormField
-               control={form.control}
+               control={control}
                name='task'
                render={({ field }) => (
                   <FormItem className='my-4'>
-                     <FormLabel className="font-mono text-md">Task</FormLabel>
+                     <FormLabel className="font-genos text-md">Task</FormLabel>
                      <FormControl>
                         <Input placeholder="What'cha gotta do..." {...field} />
                      </FormControl>
@@ -73,11 +90,11 @@ const FormElement = () => {
                )}
             />
             <FormField
-               control={form.control}
+               control={control}
                name='dueTo'
                render={({ field }) => (
                   <FormItem className='my-4'>
-                     <FormLabel className="font-mono text-md">Due to: (optional)</FormLabel>
+                     <FormLabel className="font-genos text-md">Due to: (optional)</FormLabel>
                      <FormControl>
                         <DatePicker {...field} />
                      </FormControl>
@@ -85,7 +102,7 @@ const FormElement = () => {
                   </FormItem>
                )}
             />
-            <Button className="w-1/2 font-mono text-md" type='submit'>Submit</Button>
+            <Button className="w-1/2 font-genos text-md" type='submit'>{!ctx?.edit ? "Submit" : "Edit Entry"}</Button>
          </form>
       </Form>
    )

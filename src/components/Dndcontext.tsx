@@ -8,10 +8,12 @@ import { TrashIcon } from '@radix-ui/react-icons'
 import { Button } from './ui/button'
 import { capitalize } from '@/utils'
 import { cn } from '@/lib/utils'
+import { EditIcon } from 'lucide-react'
+import { useFormContext } from 'react-hook-form'
 
 
 const Dndcontext = () => {
-
+   const formCtx = useFormContext()
    const ctx = useGlobalContext()
    console.log(ctx)
    const containers = ['planned', 'pending', 'completed']
@@ -30,8 +32,16 @@ const Dndcontext = () => {
                   )
                   const Markup = filteredTasks?.map((task) => {
                      return (
-                        <Draggable key={task.id} id={task.id} status={task.status}>
-                           <div className={'flex flex-col relative w-full h-full items-center py-1'}>
+                        <Draggable
+                           key={task.id}
+                           id={task.id}
+                           status={task.status}
+                        >
+                           <div
+                              className={
+                                 'flex flex-col relative w-full h-full items-center py-1'
+                              }
+                           >
                               <h3 className='text-xl'>{task.task}</h3>
                               <p className='absolute bottom-0 left-0 text-[0.5rem]'>
                                  Created: {task.createdAt.toLocaleDateString()}
@@ -46,18 +56,23 @@ const Dndcontext = () => {
                      )
                   })
                   return (
-                     <div className='w-[clamp(13rem,100%,20rem)]'>
+                     <div
+                        key={container}
+                        className='w-[clamp(13rem,100%,20rem)]'
+                     >
                         <h2 className='mb-4 font-genos text-2xl'>
                            {capitalize(container)}
                         </h2>
                         <Droppable
                            key={container}
                            id={container}
-                           className={cn(`${
-                              (filteredTasks ?? []).length == 0
-                                 ? 'text-black/40 dark:text-white/20'
-                                 : null
-                           } border px-2 py-2 rounded-lg shadow-lightmodeAccent dark:shadow-darkmodeAccent min-h-[17rem] flex flex-col gap-2`)}
+                           className={cn(
+                              `${
+                                 (filteredTasks ?? []).length == 0
+                                    ? 'text-black/40 dark:text-white/20'
+                                    : null
+                              } border px-2 py-2 rounded-lg shadow-lightmodeAccent dark:shadow-darkmodeAccent min-h-[17rem] flex flex-col gap-2`
+                           )}
                         >
                            {(filteredTasks ?? [])?.length > 0
                               ? [...Markup!]
@@ -67,11 +82,18 @@ const Dndcontext = () => {
                   )
                })}
             </div>
-            <Droppable className='mt-10' id={'bin'}>
-               <Button variant='destructive' className='w-[6rem] h-[6rem]'>
-                  <TrashIcon className='w-10 h-10' />
-               </Button>
-            </Droppable>
+            <div className='mt-10 flex gap-4 md:gap-16'>
+               <Droppable id={'edit'}>
+                  <Button className='w-[6rem] h-[6rem] text-white bg-amber-400 hover:bg-amber-500'>
+                     <EditIcon className='w-10 h-10' />
+                  </Button>
+               </Droppable>
+               <Droppable id={'bin'}>
+                  <Button variant='destructive' className='w-[6rem] h-[6rem]'>
+                     <TrashIcon className='w-10 h-10' />
+                  </Button>
+               </Droppable>
+            </div>
          </div>
       </DndContext>
    )
@@ -89,6 +111,13 @@ const Dndcontext = () => {
          ctx?.changeTaskStatus(toBeChangedEl!, 'completed')
       } else if (over?.id === 'bin') {
          ctx?.removeTask(draggedId as string)
+      } else if (over?.id === 'edit') {
+         const editId = toBeChangedEl?.id
+         const editTask = toBeChangedEl?.task
+         const editDueTo = toBeChangedEl?.dueTo
+         formCtx.setValue("task", editTask)
+         formCtx.setValue("dueTo", editDueTo)
+         ctx?.toggleEdit(editId!)
       }
    }
 }
